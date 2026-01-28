@@ -13,5 +13,24 @@
     };
   };
 
-  # add more as needed
+  programs.zsh = {
+    enable = true;
+  
+  # Install plugins via Nix
+    autosuggestion.enable = true;
+    syntaxHighlighting.enable = true;  # if you want this too
+  
+    # oh-my-zsh config
+    oh-my-zsh = {
+      enable = true;
+      plugins = [ "git" "docker" ];  # only built-in plugins here
+    # remove zsh-autosuggestions and zsh-autocomplete from this list
+    };
+  };
+
+# direnv
+  programs.direnv = {
+    enable = true;
+    nix-direnv.enable = true;  # better nix integration
+  };
 }
