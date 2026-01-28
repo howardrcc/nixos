@@ -29,7 +29,7 @@
     };
     shellAliases = {
       ll = "ls -al";
-      update = "sudo nixos-rebuild switch --flake .#nixos";
+      update = "sudo nixos-rebuild switch --flake ~/nixos";
     };
   };
 
@@ -38,4 +38,18 @@
     enable = true;
     nix-direnv.enable = true;  # better nix integration
   };
+
+  programs.neovim = {
+    enable = true;
+    defaultEditor = true;
+    viAlias = true;
+    vimAlias = true;
+  };
+
+  home.packages = with pkgs; [
+    gcc  # treesitter needs a compiler
+  #  git
+  #ripgrep
+  #fd
+  ];
 }
