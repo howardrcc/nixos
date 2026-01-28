@@ -89,7 +89,8 @@
   users.users.howie = {
     isNormalUser = true;
     description = "howie";
-    extraGroups = [ "networkmanager" "wheel" ];
+    shell = pkgs.zsh;
+    extraGroups = [ "docker" "networkmanager" "wheel" ];
     packages = with pkgs; [
       kdePackages.kate
       proton-pass
@@ -97,29 +98,12 @@
     ];
   };
   
-  programs.zsh = {
-    enable = true;
-    enableCompletion = true;
-    ohMyZsh = {
-      enable = true;
-      plugins = [ "git" "zsh-autosuggestions" "zsh-autocomplete" "direnv" ];
-      theme = "robbyrussell";
-    };
-#    syntaxHighlighting.enable = true;
-
-    shellAliases = {
-      ll = "ls -al";
-      update = "sudo nixos-rebuild switch";
-    };
 #    history.size = 9999;
-  };
   
-  users.extraUsers.howie = {
-    shell = pkgs.zsh;
-  };
 
 
   # Install firefox.
+  programs.zsh.enable = true;
   programs.firefox.enable = true;
 
   programs.hyprland.enable = true;
@@ -145,6 +129,7 @@
     fzf
     ripgrep
     fd
+    zsh
     oh-my-zsh
   ];
 

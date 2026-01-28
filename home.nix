@@ -23,8 +23,13 @@
     # oh-my-zsh config
     oh-my-zsh = {
       enable = true;
+      theme = "robbyrussell"; 
       plugins = [ "git" "docker" ];  # only built-in plugins here
     # remove zsh-autosuggestions and zsh-autocomplete from this list
+    };
+    shellAliases = {
+      ll = "ls -al";
+      update = "sudo nixos-rebuild switch --flake .#nixos";
     };
   };
 
