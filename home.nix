@@ -59,6 +59,8 @@
 
   home.packages = with pkgs; [
     gcc  # treesitter needs a compiler
+  #  ffmpegthumbs    # video thumbnails
+    kdePackages.kdegraphics-thumbnailers
     remmina
     lutris
     protonup-qt
@@ -71,41 +73,42 @@
 
   wayland.windowManager.hyprland = {
     enable = true;
-#    extraConfig = builtins.readFile ./extra.conf;
     settings = {
 
       monitor = ",5120x1440@120,0x0,1";
 
       exec-once = [
-#        "dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP"
-#        "systemctl --user start hyprland-session.target"
         "dms run"  # or: systemctl --user start dms
       ];
 
 
-      "$mod" = "SUPER";
+      "$mainMod" = "SUPER";
 
       bind = [
-        "$mod, Return, exec, ghostty"
-        "$mod, Q, killactive"
+        "$mainMod, Return, exec, ghostty"
+        "$mainMod, Q, killactive"
       ];
 
       general = {
         gaps_in = 5;
-        gaps_out = 10;
-        border_size = 2;
+        gaps_out = 5;
+        border_size = 1;
       };
 
       decoration = {
         rounding = 10;
       };
+      
+      #settings in source do not require nixos-rebuild and are applied immediate>
+      source = [
+        "./extra.conf"
+      ];
     };
-
+    
     extraConfig = ''
-#        source = ./extra.conf
-#
         $mainMod = SUPER
-       # Switch workspaces with mainMod + [0-9]
+
+      # Switch workspaces with mainMod + [0-9]
         bind = $mainMod, 1, workspace, 1
         bind = $mainMod, 2, workspace, 2
         bind = $mainMod, 3, workspace, 3
@@ -158,22 +161,28 @@
 
 
         # Move focus with mainMod + arrow keys
+ 
+        bind = $mainMod, H, movefocus, l
+        bind = $mainMod, L, movefocus, r
+        bind = $mainMod, K, movefocus, u
+        bind = $mainMod, J, movefocus, d
+
         bind = $mainMod, left, movefocus, l
         bind = $mainMod, right, movefocus, r
         bind = $mainMod, up, movefocus, u
         bind = $mainMod, down, movefocus, d
 
        # Application Launchers
-        bind = $mod, space, exec, dms ipc call spotlight toggle
-        bind = $mod, V, exec, dms ipc call clipboard toggle
-        bind = $mod, M, exec, dms ipc call processlist focusOrToggle
-        bind = $mod, comma, exec, dms ipc call settings focusOrToggle
-        bind = $mod, N, exec, dms ipc call notifications toggle
-        bind = $mod, Y, exec, dms ipc call dankdash wallpaper
-        bind = $mod, TAB, exec, dms ipc call hypr toggleOverview
+        bind = $mainMod, space, exec, dms ipc call spotlight toggle
+        bind = $mainMod, V, exec, dms ipc call clipboard toggle
+        bind = $mainMod, M, exec, dms ipc call processlist focusOrToggle
+        bind = $mainMod, comma, exec, dms ipc call settings focusOrToggle
+        bind = $mainMod, N, exec, dms ipc call notifications toggle
+        bind = $mainMod, Y, exec, dms ipc call dankdash wallpaper
+        bind = $mainMod, TAB, exec, dms ipc call hypr toggleOverview
 
         # Security
-        bind = $mod ALT, L, exec, dms ipc call lock lock
+        bind = $mainMod ALT, L, exec, dms ipc call lock lock
 
         # Audio Controls
         bindel = , XF86AudioRaiseVolume, exec, dms ipc call audio increment 3
@@ -183,10 +192,11 @@
         # Brightness Controls
      #   bindel = , XF86MonBrightnessUp, exec, dms ipc call brightness increment 5
      #   bindel = , XF86MonBrightnessDown, exec, dms ipc call brightness decrement 5
-         animations {
-           enabled = true # Set to false to disable all animations
-           animation = workspaces, 0, 1, default
-          }
+
+        animations {
+         enabled = true # Set to false to disable all animations
+         animation = workspaces, 0, 1, default
+        }
 
       '';
   };
