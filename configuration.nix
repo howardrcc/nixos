@@ -8,6 +8,7 @@
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
+#      ./games.nix
 #      ./pw.nix
     ];
 
@@ -24,6 +25,9 @@
 
   # Enable networking
   networking.networkmanager.enable = true;
+
+  # 32-bit support for wine/games
+  hardware.graphics.enable32Bit = true;  # was hardware.opengl.enable32Bit before 24.11
 
   # Set your time zone.
   time.timeZone = "Europe/Amsterdam";
@@ -45,7 +49,7 @@
 
   # Enable the X11 windowing system.
   # You can disable this if you're only using the Wayland session.
-  services.xserver.enable = true;
+#  services.xserver.enable = true;
 
   # Enable the KDE Plasma Desktop Environment.
   services.displayManager.sddm.enable = true;
@@ -60,6 +64,8 @@
   # Enable CUPS to print documents.
   services.printing.enable = true;
 
+# Tailscale vpn
+  services.tailscale.enable = true;
   # Enable sound with pipewire.
   services.pulseaudio.enable = false;
   security.rtkit.enable = true;
@@ -81,7 +87,8 @@
     enable = true;
     openDefaultPorts = true; # Open ports in the firewall for Syncthing. (NOTE: this will not open syncthing gui port)
   };
-  networking.firewall.allowedTCPPorts = [ 8384 ];
+  # firewall is disabled:
+  #  networking.firewall.allowedTCPPorts = [ 8384 ];
   # Enable touchpad support (enabled default in most desktopManager).
   # services.xserver.libinput.enable = true;
 
@@ -112,6 +119,7 @@
     remotePlay.openFirewall = true; # Open ports in the firewall for Steam Remote Play
     dedicatedServer.openFirewall = true; # Open ports in the firewall for Source Dedicated Server
     localNetworkGameTransfers.openFirewall = true; # Open ports in the firewall for Steam Local Network Game Transfers
+    gamescopeSession.enable = true;  # optional
   };
 # Example for /etc/nixos/configuration.nix
 
@@ -121,16 +129,22 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-  #  vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
-    wget
     ghostty
-    kitty
-	#    git #via flakes
     fzf
     ripgrep
     fd
+    wget
+
+    oh-my-zsh #check starship
     zsh
-    oh-my-zsh
+  # lutris
+#    protonup-qt
+    spotify
+    unzip
+
+  # installed with flakes
+	#    git
+  #  vim/nvim
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
